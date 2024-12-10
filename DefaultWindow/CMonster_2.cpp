@@ -31,10 +31,15 @@ void CMonster_2::Initialize()
 }
 
 int CMonster_2::Update()
-{
+{ 
+    Jumping();
 
-    float Distance = CCollisionMgr::Collision_RangeChack(m_pPlayer,this);
 
+    float Distance = CCollisionMgr::Collision_RangeChack(m_pPlayer, this);
+
+    static float fOriginalX = m_tInfo.fX; // 처음 생성된 위치 저장
+    static float fTargetX = fOriginalX;  // 초기 목표 위치 설정
+    static ULONGLONG ullLastUpdate = GetTickCount64(); // 마지막 목표 갱신 시간
     if (Distance > 200)
     {
         m_eMonsterState = MONSTER_SEARCH;
@@ -42,14 +47,20 @@ int CMonster_2::Update()
     else
     {
         m_eMonsterState = MONSTER_READY;
-    
-    }
-  
-    Jumping();
-    m_tInfo.fX -= m_fSpeed;
 
-    if (m_tInfo.fX > 700 || m_tInfo.fX < 100)
-        m_fSpeed *= -1.f;
+    }
+    // 목표 위치 갱신 (0.5초마다 새로운 목표 설정)
+    if (GetTickCount64() - ullLastUpdate > 1000)
+    {
+        ullLastUpdate = GetTickCount64(); // 갱신 시간 업데이트
+        fTargetX = fOriginalX + (rand() % 2000 - 100); // -100 ~ +100 범위로 새로운 목표 설정
+    }
+
+    // 목표를 향해 이동
+    if (m_tInfo.fX < fTargetX)
+        m_tInfo.fX += m_fSpeed;
+    else if (m_tInfo.fX > fTargetX)
+        m_tInfo.fX -= m_fSpeed;
 
     // 죽었을 경우 처리
     if (m_bDead)

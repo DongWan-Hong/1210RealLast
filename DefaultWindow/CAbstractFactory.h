@@ -46,6 +46,7 @@ public:
 		CObj* pObj = new T;
 		pObj->Set_Pos(_fX, _fY);
 		pObj->Set_Direction(_eDir);
+
 		pObj->Initialize();
 
 		return pObj;

@@ -2,6 +2,8 @@
 #include "CMonster_1.h"
 #include "CScrollMgr.h"
 #include "CBmpMgr.h"
+#include "CCollisionMgr.h"
+#include "CObjMgr.h"
 
 CMonster_1::CMonster_1()
 {
@@ -19,22 +21,35 @@ void CMonster_1::Initialize()
 
 	if (m_eDir == DIR_LEFT)
 		m_fSpeed *= -1;
-
+    m_pPlayer = CObjMgr::Get_Instance()->Get_Player();
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Rock_Man/enemy_all.bmp", L"Fire_Monster1");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Rock_Man/enemy_all.bmp", L"Fire_Monster2");
 }
 
 int CMonster_1::Update()
 {
-   // 중력대신..
     Jumping();
+
+    
+    float Distance = CCollisionMgr::Collision_RangeChack(m_pPlayer, this);
+
+    static float fOriginalX = m_tInfo.fX; // 처음 생성된 위치 저장
+    static float fTargetX = fOriginalX;  // 초기 목표 위치 설정
+    static ULONGLONG ullLastUpdate = GetTickCount64(); // 마지막 목표 갱신 시간
+
+    // 목표 위치 갱신 (0.5초마다 새로운 목표 설정)
+    if (GetTickCount64() - ullLastUpdate > 500)
+    {
+        ullLastUpdate = GetTickCount64(); // 갱신 시간 업데이트
+        fTargetX = fOriginalX + (rand() % 200 - 100); // -100 ~ +100 범위로 새로운 목표 설정
+    }
+
+    // 목표를 향해 이동
+    if (m_tInfo.fX < fTargetX)
+        m_tInfo.fX += m_fSpeed;
+    else if (m_tInfo.fX > fTargetX)
+        m_tInfo.fX -= m_fSpeed;
    
-
-    m_tInfo.fX -= m_fSpeed; 
-  
-    if (m_tInfo.fX > 700 || m_tInfo.fX < 100)
-        m_fSpeed *= -1.f; 
-
     // 죽었을 경우 처리
     if (m_bDead)
         return OBJ_DEAD;

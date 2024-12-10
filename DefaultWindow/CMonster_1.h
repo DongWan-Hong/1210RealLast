@@ -19,6 +19,7 @@ public:
 private:
     HDC		hMemDC; // 비트맵 돌려쓰기위해 미리선언
     float fGravity;
+    CObj* m_pPlayer;
 
 };
 

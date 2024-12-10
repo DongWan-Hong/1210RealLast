@@ -12,6 +12,9 @@
 #include "CWeaponsMenuMgr.h"
 #include "CSuper_Arm.h"
 #include "CAnimMgr.h"
+#include "CFire_Player_Bullet.h"
+#include "CBullet_Elec.h"
+#include "CSuper_Arm.h"
 
 
 
@@ -35,7 +38,7 @@ CPlayer::~CPlayer()
 
 void CPlayer::Initialize()
 {
-	m_tInfo = { 100.f, WINCY / 2.f, 40.f, 40.f };//초기위치
+	m_tInfo = { 100.f, 500.f, 40.f, 40.f };//초기위치
 	m_fSpeed = 10.f;//이동속도
 	m_fDistance = 100.f;//이동거리
 	m_fJumpPower = 3.f; //기본 점프 파워
@@ -210,7 +213,7 @@ void CPlayer::Render(HDC hDC)
 
 	TCHAR szBuf[32] = {};
 	wsprintf(szBuf, L"플레이어 좌표 : (%d,%d)", (int)m_tInfo.fX, (int)m_tInfo.fY);
-	TextOut(hDC, 0, 0, szBuf, lstrlen(szBuf));
+	TextOut(hDC, 200,200, szBuf, lstrlen(szBuf));
 
 	wsprintf(szBuf, L"스크롤 : (%d,%d)", iScrollX, iScrollY);
 	TextOut(hDC, 300, 0, szBuf, lstrlen(szBuf));
@@ -228,6 +231,15 @@ void CPlayer::Create_Bullet()
 	switch (m_eBullet_ID) // 뷸릿 타입 확인 // 나중에 선택하게 하기
 	{
 	case BUL_NORMAL:
+		CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CFire_Player_Bullet>::Create(m_tInfo.fX, m_tInfo.fY, m_eDir, this, nullptr));
+		break;
+	case 1:
+		CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CSuper_Arm>::Create(m_tInfo.fX, m_tInfo.fY, m_eDir, this, nullptr));
+		break;
+	case 2:
+		CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet_Elec>::Create(m_tInfo.fX, m_tInfo.fY, m_eDir, this, nullptr));
+		break;
+	case 4:
 		CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CRolling_Cutter_P>::Create(m_tInfo.fX, m_tInfo.fY, m_eDir, this, nullptr));
 		break;
 	default:

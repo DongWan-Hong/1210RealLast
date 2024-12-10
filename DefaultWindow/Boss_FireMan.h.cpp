@@ -46,8 +46,8 @@ void CBoss_FireMan::Initialize()
 
 	m_pPlayer = CObjMgr::Get_Instance()->Get_Player();
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Rock_Man/boss_fire_all.bmp",L"Fire_Man");
-
-	m_tInfo = { 300, 400, 42.f, 48.f };
+    
+	m_tInfo = { 3800, 2200, 42.f, 48.f };
 	HP_INFO = { 200,200,200.f,200.f };
 	m_fSpeed = 3.f;
 	MAX_Hp = 10;
@@ -58,15 +58,13 @@ void CBoss_FireMan::Initialize()
 //CObjMgr::Get_Instance()->Add_Object(OBJ_BOSSBULLET, CAbstractFactory<CFire_Storm>::Create(m_tInfo.fX, m_tInfo.fY, DIR_RIGHT));
 
 
-
 int CBoss_FireMan::Update()
 {
     Jumping();
 
     float Distance = CCollisionMgr::Collision_RangeChack(m_pPlayer, this);
 
-   
-   if (Distance < 300) // 400보다 가까우면
+    if (Distance < 300) // 300보다 가까우면
     {
         // 보스가 플레이어를 피해 이동
         if (m_tInfo.fX < m_pPlayer->Get_Info().fX)
@@ -74,10 +72,13 @@ int CBoss_FireMan::Update()
         else
             m_tInfo.fX += m_fSpeed; // 오른쪽으로 이동
     }
-    else // Distance == 400 (거리를 유지하고 있을 때)
+    else // Distance >= 300 (거리를 유지하고 있을 때)
     {
-        // 발사 조건: 400 거리 유지 중, 0.8초마다 발사
-        if (m_ullLast_Fire + 800 < GetTickCount64())
+        // x축 기준 거리 계산
+        float xDistance = abs(m_tInfo.fX - m_pPlayer->Get_Info().fX);
+
+        // 발사 조건: 400 거리 유지 중, x축 1000 이내, 0.8초마다 발사
+        if (xDistance <= 1000 && m_ullLast_Fire + 800 < GetTickCount64())
         {
             m_ullLast_Fire = GetTickCount64(); // 마지막 발사 시간 갱신
 
@@ -101,6 +102,7 @@ int CBoss_FireMan::Update()
     Update_Rect();
     return OBJ_NOEVENT;
 }
+
 
 
 

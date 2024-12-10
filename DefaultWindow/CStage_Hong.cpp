@@ -28,8 +28,28 @@ void CStage_Hong::Initialize()
 	//CBlockMgr::Get_Instance()->Initialize();
 
 	CObjMgr::Get_Instance()->Add_Object(OBJ_BOSS, CAbstractFactory<CBoss_FireMan>::Create());
-	CObjMgr::Get_Instance()->Add_Object(OBJ_BOSS, CAbstractFactory<CMonster_1>::Create());
-	CObjMgr::Get_Instance()->Add_Object(OBJ_BOSS, CAbstractFactory<CMonster_2>::Create());
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_1>::Create());
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_2>::Create(300.f,200.f, 0.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_2>::Create(100.f, 400.f, 0.f));
+
+
+	// 2스테이지
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_1>::Create(1100, 120.f,0.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_1>::Create(1100, 320.f, 0.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_2>::Create(1300.f, 230.f, 0.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_2>::Create(1300.f, 330.f, 0.f));
+
+	//4번째스테이지(하트다음)
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_1>::Create(910.f, 1630.f, 0.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_2>::Create(910.f, 1630.f, 0.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_2>::Create(1120.f, 1300, 0.f));
+
+	//5스테이지
+
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_1>::Create(1700.f, 1230, 0.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CMonster_2>::Create(1900.f, 1230.f, 0.f));
+
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"Back");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Ground.bmp", L"Ground");
 	

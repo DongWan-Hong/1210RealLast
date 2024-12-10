@@ -26,5 +26,11 @@ private:
 	CObj* m_pPlayer;
 	CObj* m_pBoss;
 
+	int m_iFrameIndex;
+	DWORD m_dwFrameTime;
+
+	int srcX[3] = { 308, 352, 397 };
+	int srcY[3] = { 98, 103, 104 };
+
 };
 
